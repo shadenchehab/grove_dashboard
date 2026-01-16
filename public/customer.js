@@ -71,21 +71,25 @@ function renderOrders(orders) {
   }
   
   // Sort orders by date (newest first)
-  const sortedOrders = [...orders].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedOrders = [...orders].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   
   container.innerHTML = sortedOrders.map(order => {
-    const statusClass = order.status.replace(/_/g, '-');
+    const statusClass = (order.order_status || order.status || '').replace(/_/g, '-');
     const itemNames = order.items ? order.items.slice(0, 3).map(i => i.name) : [];
     const moreItems = order.items && order.items.length > 3 ? order.items.length - 3 : 0;
     
+    const orderId = order.order_id || order.id;
+    const orderDate = order.created_at || order.date;
+    const orderStatus = order.order_status || order.status;
+    
     return `
-      <div class="customer-order-card" onclick="viewOrderDetails('${order.id}')">
+      <div class="customer-order-card" onclick="viewOrderDetails('${orderId}')">
         <div class="order-card-header">
           <div>
-            <div class="order-card-id">${order.id}</div>
-            <div class="order-card-date">${formatDate(order.date)}</div>
+            <div class="order-card-id">${orderId}</div>
+            <div class="order-card-date">${formatDate(orderDate)}</div>
           </div>
-          <span class="order-card-status status-${statusClass}">${formatStatus(order.status)}</span>
+          <span class="order-card-status status-${statusClass}">${formatStatus(orderStatus)}</span>
         </div>
         <div class="order-card-items">
           ${itemNames.map(name => `<span class="order-item-tag">${name}</span>`).join('')}
@@ -104,32 +108,36 @@ function renderOrders(orders) {
 // Order Details Modal
 // ============================================
 function viewOrderDetails(orderId) {
-  const order = ordersData.find(o => o.id === orderId);
+  const order = ordersData.find(o => (o.order_id || o.id) === orderId);
   if (!order) return;
   
   const shipment = shipmentsData.find(s => s.orderId === orderId);
-  const statusClass = order.status.replace(/_/g, '-');
+  const orderStatus = order.order_status || order.status || '';
+  const statusClass = orderStatus.replace(/_/g, '-');
+  const orderIdDisplay = order.order_id || order.id;
+  const orderDate = order.created_at || order.date;
+  const deliveryDate = order.delivery_date || order.deliveryDate;
   
   const modalTitle = document.getElementById('modal-order-id');
   const modalBody = document.getElementById('order-modal-body');
   
-  modalTitle.textContent = order.id;
+  modalTitle.textContent = orderIdDisplay;
   
   modalBody.innerHTML = `
     <div class="order-detail-section">
       <h3>Order Status</h3>
       <div class="order-detail-row">
         <span class="order-detail-label">Status</span>
-        <span class="status-badge status-${statusClass}">${formatStatus(order.status)}</span>
+        <span class="status-badge status-${statusClass}">${formatStatus(orderStatus)}</span>
       </div>
       <div class="order-detail-row">
         <span class="order-detail-label">Order Date</span>
-        <span class="order-detail-value">${formatDate(order.date)}</span>
+        <span class="order-detail-value">${formatDate(orderDate)}</span>
       </div>
-      ${order.deliveryDate ? `
+      ${deliveryDate ? `
         <div class="order-detail-row">
           <span class="order-detail-label">Delivered On</span>
-          <span class="order-detail-value">${formatDate(order.deliveryDate)}</span>
+          <span class="order-detail-value">${formatDate(deliveryDate)}</span>
         </div>
       ` : ''}
       ${shipment && shipment.estimatedDelivery ? `
