@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grove - My Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="8" fill="#0d3d4d"/>
+          <!-- Top leaf (smallest) -->
+          <ellipse cx="20" cy="10" rx="4" ry="2.5" fill="none" stroke="#f5f0e6" stroke-width="1.5" transform="rotate(0 20 10)"/>
+          <!-- Middle leaf -->
+          <ellipse cx="20" cy="18" rx="6" ry="3.5" fill="none" stroke="#f5f0e6" stroke-width="1.5" transform="rotate(0 20 18)"/>
+          <!-- Bottom leaf (largest) -->
+          <ellipse cx="20" cy="28" rx="9" ry="5" fill="none" stroke="#f5f0e6" stroke-width="1.5" transform="rotate(0 20 28)"/>
+        </svg>
+        <span class="logo-text">Grove</span>
+      </div>
+      <nav class="nav">
+        <a href="#" class="nav-link active">Dashboard</a>
+        <a href="#" class="nav-link">Orders</a>
+        <a href="#" class="nav-link">Subscriptions</a>
+        <a href="#" class="nav-link">Help</a>
+      </nav>
+      <div class="header-right">
+        <div class="user-info">
+          <span class="user-name">Sarah M.</span>
+          <div class="user-avatar">SM</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-text">
+          <span class="vip-badge">🌿 VIP Member</span>
+          <h1>Welcome back, Sarah</h1>
+          <p>Track your orders, manage shipments, and review your account all in one place.</p>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <span class="stat-value" id="total-orders">--</span>
+            <span class="stat-label">Total Orders</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="pending-shipments">--</span>
+            <span class="stat-label">Pending Shipments</span>
+          </div>
+          <div class="stat-card warning">
+            <span class="stat-value" id="pending-payments">--</span>
+            <span class="stat-label">Pending Payments</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Orders Section -->
+      <section class="card orders-section">
+        <div class="card-header">
+          <h2>Recent Orders</h2>
+          <a href="#" class="view-all">View All →</a>
+        </div>
+        <div class="orders-list" id="orders-list">
+          <div class="loading">Loading orders...</div>
+        </div>
+      </section>
+
+      <!-- Shipments Section -->
+      <section class="card shipments-section">
+        <div class="card-header">
+          <h2>Shipment Tracking</h2>
+          <button class="btn btn-outline btn-sm" onclick="refreshShipments()">Refresh</button>
+        </div>
+        <div class="shipments-list" id="shipments-list">
+          <div class="loading">Loading shipments...</div>
+        </div>
+      </section>
+
+      <!-- Payments Section -->
+      <section class="card payments-section">
+        <div class="card-header">
+          <h2>Pending Payments</h2>
+          <span class="pending-total" id="pending-total">$0.00</span>
+        </div>
+        <div class="payments-list" id="payments-list">
+          <div class="loading">Loading payments...</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- API Reference Section -->
+    <section class="api-reference-section">
+      <div class="card api-card">
+        <div class="card-header">
+          <h2>🔌 API Reference</h2>
+          <span class="api-badge">REST API</span>
+        </div>
+        <div class="api-list">
+          <!-- Orders APIs -->
+          <div class="api-group">
+            <h3 class="api-group-title">📦 Orders</h3>
+            <div class="api-endpoint" onclick="testApi('/api/order/ORD-2026-001')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/order/:orderId</span>
+              <span class="api-desc">Get order by Order ID</span>
+            </div>
+            <div class="api-endpoint" onclick="testApi('/api/orders/shaden.chehab@devrev.ai')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/orders/:customerId</span>
+              <span class="api-desc">Get all orders by Customer ID</span>
+            </div>
+            <div class="api-endpoint" onclick="testApi('/api/v2/orders')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/v2/orders</span>
+              <span class="api-desc">List all orders (v2 format)</span>
+            </div>
+          </div>
+
+          <!-- Shipments APIs -->
+          <div class="api-group">
+            <h3 class="api-group-title">🚚 Shipments</h3>
+            <div class="api-endpoint" onclick="testApi('/api/shipment/SHIP-001')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/shipment/:shipmentId</span>
+              <span class="api-desc">Get shipment by Shipment ID</span>
+            </div>
+            <div class="api-endpoint" onclick="testApi('/api/shipments/shaden.chehab@devrev.ai')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/shipments/:customerId</span>
+              <span class="api-desc">Get all shipments by Customer ID</span>
+            </div>
+            <div class="api-endpoint" onclick="testApi('/api/track/ECO-7829374651')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/track/:trackingNumber</span>
+              <span class="api-desc">Track by tracking number</span>
+            </div>
+          </div>
+
+          <!-- Customer APIs -->
+          <div class="api-group">
+            <h3 class="api-group-title">👤 Customer</h3>
+            <div class="api-endpoint" onclick="testApi('/api/customer/shaden.chehab@devrev.ai')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/customer/:id</span>
+              <span class="api-desc">Get customer profile</span>
+            </div>
+            <div class="api-endpoint" onclick="testApi('/api/customer/shaden.chehab@devrev.ai/credit')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/customer/:id/credit</span>
+              <span class="api-desc">Get customer credit balance</span>
+            </div>
+            <div class="api-endpoint" onclick="testPostApi('/api/customer/shaden.chehab@devrev.ai/credit', {amount: 25})">
+              <span class="api-method post">POST</span>
+              <span class="api-path">/api/customer/:id/credit</span>
+              <span class="api-desc">Add credit to customer</span>
+            </div>
+            <div class="api-endpoint" onclick="testApi('/api/dashboard/shaden.chehab@devrev.ai')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/dashboard/:customerId</span>
+              <span class="api-desc">Get full dashboard data</span>
+            </div>
+          </div>
+
+          <!-- Order Actions APIs -->
+          <div class="api-group">
+            <h3 class="api-group-title">⚡ Order Actions</h3>
+            <div class="api-endpoint" onclick="testPostApi('/api/order/ORD-2026-007/cancel', {})">
+              <span class="api-method post">POST</span>
+              <span class="api-path">/api/order/:orderId/cancel</span>
+              <span class="api-desc">Cancel an order</span>
+            </div>
+            <div class="api-endpoint" onclick="testPostApi('/api/order/ORD-2026-001/refund', {amount: 20})">
+              <span class="api-method post">POST</span>
+              <span class="api-path">/api/order/:orderId/refund</span>
+              <span class="api-desc">Refund order (amount required)</span>
+            </div>
+            <div class="api-endpoint" onclick="testPostApi('/api/order/ORD-2026-007/cancel-and-credit', {})">
+              <span class="api-method post">POST</span>
+              <span class="api-path">/api/order/:orderId/cancel-and-credit</span>
+              <span class="api-desc">Cancel order & add credit</span>
+            </div>
+          </div>
+
+          <!-- Schema API -->
+          <div class="api-group">
+            <h3 class="api-group-title">📋 Schema</h3>
+            <div class="api-endpoint" onclick="testApi('/api/v2/schema')">
+              <span class="api-method get">GET</span>
+              <span class="api-path">/api/v2/schema</span>
+              <span class="api-desc">View data model schema</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Response Preview -->
+      <div class="card api-response-card">
+        <div class="card-header">
+          <h2>📄 API Response</h2>
+          <button class="btn btn-outline btn-sm" onclick="clearApiResponse()">Clear</button>
+        </div>
+        <div class="api-response-container">
+          <div class="api-response-url" id="api-response-url">Click an API endpoint to test</div>
+          <pre class="api-response" id="api-response">// Response will appear here</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Address Modal -->
+  <div class="modal" id="address-modal">
+    <div class="modal-backdrop" onclick="closeAddressModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add Shipping Address</h2>
+        <button class="modal-close" onclick="closeAddressModal()">×</button>
+      </div>
+      <form id="address-form" onsubmit="submitAddress(event)">
+        <div class="form-group">
+          <label for="street">Street Address</label>
+          <input type="text" id="street" name="street" placeholder="123 Green Street" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" placeholder="San Francisco" required>
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" placeholder="CA" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="zipCode">ZIP Code</label>
+            <input type="text" id="zipCode" name="zipCode" placeholder="94102" required>
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" value="USA" required>
+          </div>
+        </div>
+        <div class="api-preview">
+          <h4>API Request Preview</h4>
+          <pre id="address-api-preview">PUT /api/customer/cust_001/address
+Content-Type: application/json
+
+{
+  "street": "",
+  "city": "",
+  "state": "",
+  "zipCode": "",
+  "country": "USA"
+}</pre>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="closeAddressModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Address</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <div class="toast-icon">✓</div>
+    <div class="toast-message" id="toast-message"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

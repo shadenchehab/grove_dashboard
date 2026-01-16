@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grove - My Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="customer.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="8" fill="#0d3d4d"/>
+          <ellipse cx="20" cy="10" rx="4" ry="2.5" fill="none" stroke="#f5f0e6" stroke-width="1.5" transform="rotate(0 20 10)"/>
+          <ellipse cx="20" cy="18" rx="6" ry="3.5" fill="none" stroke="#f5f0e6" stroke-width="1.5" transform="rotate(0 20 18)"/>
+          <ellipse cx="20" cy="28" rx="9" ry="5" fill="none" stroke="#f5f0e6" stroke-width="1.5" transform="rotate(0 20 28)"/>
+        </svg>
+        <span class="logo-text">Grove</span>
+      </div>
+      <nav class="nav">
+        <a href="/" class="nav-link active">My Orders</a>
+        <a href="#" class="nav-link">Shop</a>
+        <a href="#" class="nav-link">Help</a>
+      </nav>
+      <div class="header-right">
+        <div class="user-info">
+          <span class="user-name">Shaden</span>
+          <div class="user-avatar">SC</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main customer-main">
+    <!-- Welcome Section -->
+    <section class="customer-hero">
+      <div class="customer-hero-content">
+        <h1>My Orders</h1>
+        <p>View and track your recent orders</p>
+        <div class="customer-credit-badge">
+          <span class="credit-label">Account Credit</span>
+          <span class="credit-amount" id="credit-amount">$0.00</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Orders List -->
+    <section class="customer-orders">
+      <div class="orders-container" id="orders-container">
+        <div class="loading">Loading your orders...</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Order Detail Modal -->
+  <div class="modal" id="order-modal">
+    <div class="modal-backdrop" onclick="closeOrderModal()"></div>
+    <div class="modal-content order-modal-content">
+      <div class="modal-header">
+        <h2 id="modal-order-id">Order Details</h2>
+        <button class="modal-close" onclick="closeOrderModal()">×</button>
+      </div>
+      <div class="order-modal-body" id="order-modal-body">
+        <!-- Order details will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <div class="toast-icon">✓</div>
+    <div class="toast-message" id="toast-message"></div>
+  </div>
+
+  <script src="customer.js"></script>
+</body>
+</html>
