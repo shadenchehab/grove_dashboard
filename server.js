@@ -119,7 +119,7 @@ let orders = [
   {
     order_id: "ORD-2026-005",
     customer_id: "shaden.chehab@devrev.ai",
-    order_status: OrderStatus.DELIVERED,
+    order_status: OrderStatus.RECEIVED,
     created_at: "2026-01-08T08:00:00Z",
     fulfillment_id: "FUL-005",
     items: [
@@ -132,7 +132,7 @@ let orders = [
   {
     order_id: "ORD-2026-006",
     customer_id: "shaden.chehab@devrev.ai",
-    order_status: OrderStatus.DELIVERED,
+    order_status: OrderStatus.RECEIVED,
     created_at: "2026-01-09T16:00:00Z",
     fulfillment_id: "FUL-006",
     items: [
@@ -159,7 +159,7 @@ let orders = [
   {
     order_id: "ORD-2025-008",
     customer_id: "shaden.chehab@devrev.ai",
-    order_status: OrderStatus.DELIVERED,
+    order_status: OrderStatus.RECEIVED,
     created_at: "2025-10-25T09:00:00Z",
     delivery_date: "2025-11-01T14:00:00Z",
     fulfillment_id: "FUL-008",
@@ -1140,7 +1140,7 @@ app.post('/api/v2/shipments/:shipmentId/events', (req, res) => {
   if (status === DeliveryStatus.DELIVERED) {
     const order = orders.find(o => o.order_id === shipment.order_id);
     if (order) {
-      order.order_status = OrderStatus.DELIVERED;
+      order.order_status = OrderStatus.RECEIVED;
     }
   }
   
@@ -1211,7 +1211,7 @@ app.post('/api/order/:orderId/cancel', (req, res) => {
   }
 
   // Check if order can be cancelled
-  if (order.order_status === OrderStatus.DELIVERED) {
+  if (order.order_status === OrderStatus.RECEIVED) {
     return res.status(400).json({ error: 'Cannot cancel a delivered order' });
   }
   if (order.order_status === OrderStatus.CANCELLED) {
@@ -1298,7 +1298,7 @@ app.post('/api/order/:orderId/cancel-and-credit', (req, res) => {
   }
 
   // Check if order can be cancelled
-  if (order.order_status === OrderStatus.DELIVERED) {
+  if (order.order_status === OrderStatus.RECEIVED) {
     return res.status(400).json({ error: 'Cannot cancel a delivered order' });
   }
   if (order.order_status === OrderStatus.CANCELLED) {

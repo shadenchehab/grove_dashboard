@@ -509,7 +509,8 @@ body {
   color: var(--grove-leaf);
 }
 
-.status-delivered {
+.status-delivered,
+.status-received {
   background: rgba(74, 124, 89, 0.3);
   color: var(--grove-forest);
 }
